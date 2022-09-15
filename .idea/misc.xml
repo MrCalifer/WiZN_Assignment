@@ -3,9 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/drawable/ic_delete.xml" value="0.159" />
+        <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/drawable/ic_favorite.xml" value="0.159" />
+        <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/drawable/ic_favourite.xml" value="0.159" />
+        <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/drawable/ic_not_favorite.xml" value="0.159" />
         <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/layout/activity_main.xml" value="0.12158054711246201" />
         <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/layout/fragment_detail.xml" value="0.25" />
         <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/ARPIT/AndroidStudioProjects/WiZNAssignment/app/src/main/res/layout/movie_recycler_item.xml" value="0.24895833333333334" />
       </map>
     </option>
   </component>
