@@ -56,6 +56,16 @@ class HomeFragment : Fragment() {
                             viewModel.updateFavouriteMovie(movieEntity)
                             adapter?.notifyItemChanged(position)
                         }
+
+                        override fun onMovieClick(position: Int) {
+                            viewModel.currentPosition.value = position
+                            activity?.supportFragmentManager?.let { it1 ->
+                                viewModel.launchFragment(
+                                    DetailFragment(), "Detailed Fragment",
+                                    it1
+                                )
+                            }
+                        }
                     })
                 }
             }

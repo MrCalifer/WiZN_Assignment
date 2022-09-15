@@ -22,6 +22,8 @@ class ViewModel : ViewModel() {
     private val TAG: String = "ViewModel"
     lateinit var application: Application
 
+    var currentPosition : MutableLiveData<Int> = MutableLiveData(-1)
+
     var movies: MutableLiveData<ArrayList<MovieEntity>> = MutableLiveData<ArrayList<MovieEntity>>()
 
     /**

@@ -8,7 +8,7 @@ import edu.califer.wiznassignment.R
 import edu.califer.wiznassignment.databinding.MovieRecyclerItemBinding
 import edu.califer.wiznassignment.persistance.Entities.MovieEntity
 
-class MovieAdapter(private val movies: ArrayList<MovieEntity> , var movieListener: MovieListener) :
+class MovieAdapter(private val movies: ArrayList<MovieEntity>, var movieListener: MovieListener) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: MovieRecyclerItemBinding) :
@@ -35,7 +35,7 @@ class MovieAdapter(private val movies: ArrayList<MovieEntity> , var movieListene
         ) {
             binding.favMovieButton.setOnClickListener {
                 movieEntity.isFavourite = !movieEntity.isFavourite
-                movieListener.onFavourite(movieEntity , position)
+                movieListener.onFavourite(movieEntity, position)
                 if (movieEntity.isFavourite) {
                     holder.binding.favMovieButton.setImageResource(R.drawable.ic_favorite)
                 } else {
@@ -45,7 +45,15 @@ class MovieAdapter(private val movies: ArrayList<MovieEntity> , var movieListene
 
             binding.deleteMovieButton.setOnClickListener {
                 movieAdapter.movies.remove(movieEntity)
-                movieListener.onDelete(movieEntity , position)
+                movieListener.onDelete(movieEntity, position)
+            }
+
+            binding.movieImage.setOnClickListener {
+                movieListener.onMovieClick(position)
+            }
+
+            binding.movieTitle.setOnClickListener {
+                movieListener.onMovieClick(position)
             }
         }
 
@@ -62,15 +70,16 @@ class MovieAdapter(private val movies: ArrayList<MovieEntity> , var movieListene
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(movies[position])
-        holder.onClick(movies[position], holder, this, position , movieListener)
+        holder.onClick(movies[position], holder, this, position, movieListener)
     }
 
     override fun getItemCount(): Int {
         return movies.size
     }
 
-    interface MovieListener{
+    interface MovieListener {
         fun onDelete(movieEntity: MovieEntity, position: Int)
         fun onFavourite(movieEntity: MovieEntity, position: Int)
+        fun onMovieClick(position: Int)
     }
 }
