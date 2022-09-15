@@ -9,17 +9,20 @@ import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import edu.califer.wiznassignment.R
-import edu.califer.wiznassignment.fragments.HomeFragment
+import edu.califer.wiznassignment.persistance.Entities.MovieEntity
 import edu.califer.wiznassignment.repository.MovieRepository
 import kotlinx.coroutines.launch
 
 class ViewModel : ViewModel() {
 
-    private val TAG: String = "MovieRepository"
+    private val TAG: String = "ViewModel"
     lateinit var application: Application
+
+    var movies: MutableLiveData<ArrayList<MovieEntity>> = MutableLiveData<ArrayList<MovieEntity>>()
 
 
     /**
@@ -29,11 +32,12 @@ class ViewModel : ViewModel() {
      */
     fun launchFragment(fragment: Fragment, tag: String, fragmentManager: FragmentManager) {
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        if (fragment == HomeFragment()) {
-            transaction.add(R.id.container, fragment, tag)
-        } else {
-            transaction.replace(R.id.container, fragment, tag)
-        }
+        transaction.replace(R.id.container, fragment, tag)
+//        if (fragment == HomeFragment()) {
+//
+//        } else {
+//            transaction.replace(R.id.container, fragment, tag)
+//        }
         transaction.addToBackStack(null)
         transaction.commit()
     }
@@ -42,19 +46,54 @@ class ViewModel : ViewModel() {
     /**
      * Function to fetch trending movies of the week from TMDB.
      */
-    fun fetchTrendingMovie() {
+    private fun fetchTrendingMovie() {
         val movieRepository = MovieRepository(application)
         viewModelScope.launch {
             val result = kotlin.runCatching {
                 movieRepository.getTrendingMovie()
             }
 
-            result.onSuccess {
-                Log.d(TAG , "$it")
+            result.onSuccess { it ->
+                Log.d(TAG, "Response item size : ${it.results.size}")
+                it.results.forEach {
+                    movieRepository.insertMovieInDB(
+                        MovieEntity(
+                            it.id.toString(),
+                            it.title,
+                            false,
+                            it.poster_path
+                        )
+                    )
+                }
             }
 
             result.onFailure {
-                Log.e(TAG , "Failed due to $it")
+                Log.e(TAG, "Failed due to $it")
+            }
+        }
+    }
+
+    /**
+     * Function to fetch trending movies of the week from Database.
+     */
+    fun fetchTrendingMovieFromDB() {
+        val movieRepository = MovieRepository(application)
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                movieRepository.getMoviesFromDB()
+            }
+
+            result.onSuccess {
+                if (it.isEmpty()) {
+                    fetchTrendingMovie()
+                } else {
+                    movies.value = it as ArrayList<MovieEntity>
+                }
+                Log.d(TAG, "DB Items size : ${it.size}")
+            }
+
+            result.onFailure {
+                Log.e(TAG, "Failed due to $it")
             }
         }
     }

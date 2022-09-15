@@ -39,11 +39,16 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-//        viewModel.fetchPopularMovie()
+        viewModel.fetchTrendingMovieFromDB()
 
-//        binding.movieRecyclerView.apply {
-//            layoutManager =LinearLayoutManager(context)
-//            adapter = MovieAdapter()
-//        }
+        binding.movieRecyclerView.apply {
+            layoutManager =LinearLayoutManager(context)
+            adapter = MovieAdapter()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.finish()
     }
 }

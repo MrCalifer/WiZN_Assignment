@@ -8,10 +8,18 @@ class DatabaseHelperImp(private val database : Database) : DatabaseHelper {
     }
 
     override suspend fun deleteMovie(movieEntity: MovieEntity) {
-        TODO("Not yet implemented")
+        database.movieDao().deleteDao(movieEntity)
     }
 
-    override suspend fun updateFavMovie(movieEntity: MovieEntity) {
-        TODO("Not yet implemented")
+    override suspend fun updateFavourite(movieEntity: MovieEntity) {
+        database.movieDao().updateFavourite(movieEntity.isFavourite , movieEntity.id)
+    }
+
+    override suspend fun getAllMovies(): List<MovieEntity> {
+        return database.movieDao().getAllMovies()
+    }
+
+    override suspend fun deleteMovieTable() {
+        database.movieDao().nukeMovieTable()
     }
 }
