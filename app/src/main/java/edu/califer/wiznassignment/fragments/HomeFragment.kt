@@ -1,16 +1,17 @@
 package edu.califer.wiznassignment.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.califer.wiznassignment.R
 import edu.califer.wiznassignment.adapter.MovieAdapter
 import edu.califer.wiznassignment.databinding.FragmentHomeBinding
+import edu.califer.wiznassignment.persistance.Entities.MovieEntity
 import edu.califer.wiznassignment.viewmodel.ViewModel
 
 class HomeFragment : Fragment() {
@@ -41,9 +42,23 @@ class HomeFragment : Fragment() {
 
         viewModel.fetchTrendingMovieFromDB()
 
-        binding.movieRecyclerView.apply {
-            layoutManager =LinearLayoutManager(context)
-            adapter = MovieAdapter()
+        viewModel.movies.observe(viewLifecycleOwner) {
+            if (it.size > 0) {
+                binding.movieRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = MovieAdapter(it, object : MovieAdapter.MovieListener {
+                        override fun onDelete(movieEntity: MovieEntity, position: Int) {
+                            viewModel.deleteMovie(movieEntity)
+                            adapter?.notifyItemRemoved(position)
+                        }
+
+                        override fun onFavourite(movieEntity: MovieEntity, position: Int) {
+                            viewModel.updateFavouriteMovie(movieEntity)
+                            adapter?.notifyItemChanged(position)
+                        }
+                    })
+                }
+            }
         }
     }
 

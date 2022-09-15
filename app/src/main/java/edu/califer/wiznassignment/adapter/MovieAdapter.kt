@@ -8,18 +8,44 @@ import edu.califer.wiznassignment.R
 import edu.califer.wiznassignment.databinding.MovieRecyclerItemBinding
 import edu.califer.wiznassignment.persistance.Entities.MovieEntity
 
-class MovieAdapter() : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
+class MovieAdapter(private val movies: ArrayList<MovieEntity> , var movieListener: MovieListener) :
+    RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding: MovieRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movieEntity: MovieEntity) {
-            Glide.with(binding.root).load(movieEntity.imageURL).into(binding.movieImage)
+            Glide.with(binding.root)
+                .load("https://www.themoviedb.org/t/p/w220_and_h330_face/" + movieEntity.imageURL)
+                .into(binding.movieImage)
             binding.movieName = movieEntity.title
             if (movieEntity.isFavourite) {
                 binding.favMovieButton.setImageResource(R.drawable.ic_favorite)
             } else {
                 binding.favMovieButton.setImageResource(R.drawable.ic_not_favorite)
+            }
+        }
+
+        fun onClick(
+            movieEntity: MovieEntity,
+            holder: ViewHolder,
+            movieAdapter: MovieAdapter,
+            position: Int,
+            movieListener: MovieListener
+        ) {
+            binding.favMovieButton.setOnClickListener {
+                movieEntity.isFavourite = !movieEntity.isFavourite
+                movieListener.onFavourite(movieEntity , position)
+                if (movieEntity.isFavourite) {
+                    holder.binding.favMovieButton.setImageResource(R.drawable.ic_favorite)
+                } else {
+                    holder.binding.favMovieButton.setImageResource(R.drawable.ic_not_favorite)
+                }
+            }
+
+            binding.deleteMovieButton.setOnClickListener {
+                movieAdapter.movies.remove(movieEntity)
+                movieListener.onDelete(movieEntity , position)
             }
         }
 
@@ -35,11 +61,16 @@ class MovieAdapter() : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.bind(movies[position])
+        holder.onClick(movies[position], holder, this, position , movieListener)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return movies.size
     }
 
+    interface MovieListener{
+        fun onDelete(movieEntity: MovieEntity, position: Int)
+        fun onFavourite(movieEntity: MovieEntity, position: Int)
+    }
 }

@@ -24,7 +24,6 @@ class ViewModel : ViewModel() {
 
     var movies: MutableLiveData<ArrayList<MovieEntity>> = MutableLiveData<ArrayList<MovieEntity>>()
 
-
     /**
      * Function to Launch Fragment
      * @param fragment Pass the fragment to be launched
@@ -33,20 +32,15 @@ class ViewModel : ViewModel() {
     fun launchFragment(fragment: Fragment, tag: String, fragmentManager: FragmentManager) {
         val transaction: FragmentTransaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.container, fragment, tag)
-//        if (fragment == HomeFragment()) {
-//
-//        } else {
-//            transaction.replace(R.id.container, fragment, tag)
-//        }
         transaction.addToBackStack(null)
         transaction.commit()
     }
-
 
     /**
      * Function to fetch trending movies of the week from TMDB.
      */
     private fun fetchTrendingMovie() {
+        Log.d(TAG, "API called.")
         val movieRepository = MovieRepository(application)
         viewModelScope.launch {
             val result = kotlin.runCatching {
@@ -65,6 +59,7 @@ class ViewModel : ViewModel() {
                         )
                     )
                 }
+                fetchTrendingMovieFromDB()
             }
 
             result.onFailure {
@@ -98,6 +93,45 @@ class ViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Function to update the favorite movie in Database
+     */
+    fun updateFavouriteMovie(movieEntity: MovieEntity){
+        val movieRepository = MovieRepository(application)
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                movieRepository.updateFavouriteMovie(movieEntity)
+            }
+
+            result.onSuccess {
+                Log.d(TAG , "Item Updated successfully in DB.")
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Item failed to updated in DB due to $it.")
+            }
+        }
+    }
+
+    /**
+     * Function to delete a movie from the database.
+     */
+    fun deleteMovie(movieEntity: MovieEntity){
+        val movieRepository = MovieRepository(application)
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                movieRepository.deleteMovie(movieEntity)
+            }
+
+            result.onSuccess {
+                Log.d(TAG , "Item Deleted successfully from DB.")
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Item failed to delete from DB due to $it.")
+            }
+        }
+    }
 
     /**For the Status Bar Icon Color.
      * 0-> Icon Color will be White

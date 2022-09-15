@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import edu.califer.wiznassignment.BuildConfig
 import edu.califer.wiznassignment.api.Models.MovieModel
-import edu.califer.wiznassignment.api.Models.MovieModelItem
 import edu.califer.wiznassignment.api.RetrofitClient
 import edu.califer.wiznassignment.persistance.DatabaseBuilder
 import edu.califer.wiznassignment.persistance.DatabaseHelperImp
@@ -62,6 +61,20 @@ class MovieRepository(application: Application) {
      */
     suspend fun getTrendingMovie(): MovieModel {
         return retrofitClient.getTrendingMovie(BuildConfig.API_KEY)
+    }
+
+    /**
+     * Function to update the favourite movies in Database
+     */
+    suspend fun updateFavouriteMovie(movieEntity: MovieEntity){
+        dbHelper.updateFavourite(movieEntity)
+    }
+
+    /**
+     * Function to delete a movie from the database.
+     */
+    suspend fun deleteMovie(movieEntity: MovieEntity){
+        dbHelper.deleteMovie(movieEntity)
     }
 
 }
