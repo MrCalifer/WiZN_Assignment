@@ -3,8 +3,6 @@ package edu.califer.wiznassignment.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import edu.califer.wiznassignment.R
 import edu.califer.wiznassignment.databinding.ActivityMainBinding
@@ -22,7 +20,8 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
-        viewModel = ViewModelProvider(this)[edu.califer.wiznassignment.viewmodel.ViewModel::class.java]
+        viewModel =
+            ViewModelProvider(this)[edu.califer.wiznassignment.viewmodel.ViewModel::class.java]
 
         /**Setting the Status Bar Icon Color.*/
         viewModel.statusBarIconColor(1, this)
@@ -32,6 +31,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         //Launching HomeFragment
-        viewModel.launchFragment(HomeFragment() , "HomeFragment" , supportFragmentManager)
+        viewModel.launchFragment(HomeFragment(), "HomeFragment", supportFragmentManager)
     }
 }

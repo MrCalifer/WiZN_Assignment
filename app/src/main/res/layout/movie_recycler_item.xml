@@ -2,6 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="movieName"
+            type="String" />
+
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +40,7 @@
                 android:layout_height="0dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Movie Title"
+                android:text="@{movieName , default = `Movie Title`}"
                 android:textColor="@color/black"
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
