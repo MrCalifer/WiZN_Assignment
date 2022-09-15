@@ -39,9 +39,11 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.movieRecyclerView.apply {
-            layoutManager =LinearLayoutManager(context)
-            adapter = MovieAdapter()
-        }
+//        viewModel.fetchPopularMovie()
+
+//        binding.movieRecyclerView.apply {
+//            layoutManager =LinearLayoutManager(context)
+//            adapter = MovieAdapter()
+//        }
     }
 }

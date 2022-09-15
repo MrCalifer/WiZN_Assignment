@@ -1,19 +1,25 @@
 package edu.califer.wiznassignment.viewmodel
 
 import android.app.Activity
+import android.app.Application
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import edu.califer.wiznassignment.R
 import edu.califer.wiznassignment.fragments.HomeFragment
+import edu.califer.wiznassignment.repository.MovieRepository
+import kotlinx.coroutines.launch
 
 class ViewModel : ViewModel() {
 
-    private val TAG :String = "MovieRepository"
+    private val TAG: String = "MovieRepository"
+    lateinit var application: Application
 
 
     /**
@@ -31,6 +37,28 @@ class ViewModel : ViewModel() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+
+    /**
+     * Function to fetch trending movies of the week from TMDB.
+     */
+    fun fetchTrendingMovie() {
+        val movieRepository = MovieRepository(application)
+        viewModelScope.launch {
+            val result = kotlin.runCatching {
+                movieRepository.getTrendingMovie()
+            }
+
+            result.onSuccess {
+                Log.d(TAG , "$it")
+            }
+
+            result.onFailure {
+                Log.e(TAG , "Failed due to $it")
+            }
+        }
+    }
+
 
     /**For the Status Bar Icon Color.
      * 0-> Icon Color will be White
