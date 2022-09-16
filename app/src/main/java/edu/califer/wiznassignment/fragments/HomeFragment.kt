@@ -1,6 +1,7 @@
 package edu.califer.wiznassignment.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class HomeFragment : Fragment() {
                     adapter = MovieAdapter(it, object : MovieAdapter.MovieListener {
                         override fun onDelete(movieEntity: MovieEntity, position: Int) {
                             viewModel.deleteMovie(movieEntity)
-                            adapter?.notifyItemRemoved(position)
+                            adapter?.notifyDataSetChanged()
                         }
 
                         override fun onFavourite(movieEntity: MovieEntity, position: Int) {
